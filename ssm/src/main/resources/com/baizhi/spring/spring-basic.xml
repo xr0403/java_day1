@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+<!-- 开启扫描注解 -->
+    <context:component-scan base-package="com.baizhi.*" />
+    <!--引入文件配置-->
+    <context:property-placeholder location="classpath:db.properties" />
+    <!--创建数据源-->
+    <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${mysql}"></property>
+        <property name="url" value=""></property>
+        <property name="username" value=""></property>
+        <property name="password" value="mysql."></property>
+    </bean>
+    <!-- 创建SqlSerssionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="druidDataSource"/>
+        <property name="mapperLocations" value="classpath:com/baizhi/mapper/*.xml"/>
+        <property name="typeAliasesPackage" value="com/baizhi/entity"/>
+    </bean>
+
+    <!--创建项目中的DAO-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.baizhi.dao"/>
+    </bean>
+    <!--创建事务管理器-->
+    <bean id="" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref=""/>
+    </bean>
+</beans>
